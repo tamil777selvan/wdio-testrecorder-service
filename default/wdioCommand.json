@@ -1,0 +1,29 @@
+{
+  "jsonWireActions": [
+    "url",
+    "forward",
+    "back",
+    "execute",
+    "position",
+    "click",
+    "submit",
+    "value",
+    "keys",
+    "clear",
+    "selected",
+    "enabled",
+    "displayed",
+    "orientation",
+    "alert_text",
+    "accept_alert",
+    "dismiss_alert",
+    "moveto",
+    "doubleclick",
+    "down",
+    "up",
+    "move",
+    "scroll",
+    "flick",
+    "location"
+  ]
+}
