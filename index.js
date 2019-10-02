@@ -18,6 +18,7 @@ export default class testrecorder extends Reporter {
         super(options);
         if (!options.videoOutputPath) {
             options.videoOutputPath = DEFAULT_VIDEO_OUTPUT_FOLDER;
+            // eslint-disable-next-line no-console
             console.log(`The 'videoOutputPath' was not set, it has been set to the default '${DEFAULT_VIDEO_OUTPUT_FOLDER}'`);
         }
         if (typeof options.savePassedVideo === 'boolean') {
@@ -28,17 +29,20 @@ export default class testrecorder extends Reporter {
             }
         } else {
             options.savePassedVideo = DEFAULT_SAVE_PASSED_VIDEO;
+            // eslint-disable-next-line no-console
             console.log(`'savePassedVideo' received unsuported parameter, it has been set to the default '${DEFAULT_SAVE_PASSED_VIDEO}'`);
         }
         if (!options.jsonWireCommands) {
             options.jsonWireCommands = DEFAULT_JSON_WIRE_ACTION;
-            console.log(`The 'jsonWireCommands' was not set, it has been set to the default configurations`);
+            // eslint-disable-next-line no-console
+            console.log('The \'jsonWireCommands\' was not set, it has been set to the default configurations');
         } else {
             options.jsonWireCommands = options.jsonWireCommands;
         }
         if (!options.framerate) {
             options.framerate = DEFAULT_FRAME_RATE;
-            console.log(`The 'framerate' was not set, it has been set to the default configurations`);
+            // eslint-disable-next-line no-console
+            console.log('The \'framerate\' was not set, it has been set to the default configurations');
         } else {
             options.framerate = options.framerate;
         }
@@ -75,9 +79,6 @@ export default class testrecorder extends Reporter {
             let videoOutputPath = path.resolve(this.options.videoOutputPath);
             let imageName = 'img' + imageCount.toString().padStart(3, '0');
             let fileName = `${videoOutputPath}/${scenarioName}/` + imageName + '.png';
-            if (!fs.existsSync(`${videoOutputPath}`)) {
-                fs.mkdirSync(`${videoOutputPath}`);
-            }
             if (!fs.existsSync(`${videoOutputPath}/${scenarioName}`)) {
                 fs.mkdirSync(`${videoOutputPath}/${scenarioName}`);
             }
@@ -100,8 +101,11 @@ export default class testrecorder extends Reporter {
             let videoOutputPath = path.resolve(this.options.videoOutputPath);
             let imagePath = `${videoOutputPath}/${scenarioName}/img%03d.png`;
             let videoPath = `${videoOutputPath}/videos/${scenarioName}.mp4`;
-            if (!fs.existsSync(`${videoOutputPath}/videos`)) {
+            if (!fs.existsSync(`${videoOutputPath}/videos/`)) {
                 fs.mkdirSync(`${videoOutputPath}/videos`);
+            }
+            if (fs.existsSync(`${videoPath}`)) {
+                removeSync(`${videoPath}`);
             }
             try {
                 let videoRecordingCommand = `${ffmpeg.path} -framerate ${this.options.framerate} -i ${imagePath} -vf scale=2880x1312 -pix_fmt yuv420p ${videoPath}`;

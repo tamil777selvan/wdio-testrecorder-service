@@ -1,7 +1,7 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 exports.default = void 0;
 
@@ -29,134 +29,138 @@ let imageCount = 0;
 let scenarioName;
 
 class testrecorder extends _reporter.default {
-    constructor(options) {
-        super(options);
+  constructor(options) {
+    super(options);
 
-        if (!options.videoOutputPath) {
-            options.videoOutputPath = DEFAULT_VIDEO_OUTPUT_FOLDER;
-            console.log(`The 'videoOutputPath' was not set, it has been set to the default '${DEFAULT_VIDEO_OUTPUT_FOLDER}'`);
-        }
+    if (!options.videoOutputPath) {
+      options.videoOutputPath = DEFAULT_VIDEO_OUTPUT_FOLDER; // eslint-disable-next-line no-console
 
-        if (typeof options.savePassedVideo === 'boolean') {
-            if (options.savePassedVideo) {
-                options.savePassedVideo = options.savePassedVideo;
-            } else {
-                options.savePassedVideo = DEFAULT_SAVE_PASSED_VIDEO;
-            }
-        } else {
-            options.savePassedVideo = DEFAULT_SAVE_PASSED_VIDEO;
-            console.log(`'savePassedVideo' received unsuported parameter, it has been set to the default '${DEFAULT_SAVE_PASSED_VIDEO}'`);
-        }
-
-        if (!options.jsonWireCommands) {
-            options.jsonWireCommands = DEFAULT_JSON_WIRE_ACTION;
-            console.log(`The 'jsonWireCommands' was not set, it has been set to the default configurations`);
-        } else {
-            options.jsonWireCommands = options.jsonWireCommands;
-        }
-
-        if (!options.framerate) {
-            options.framerate = DEFAULT_FRAME_RATE;
-            console.log(`The 'framerate' was not set, it has been set to the default configurations`);
-        } else {
-            options.framerate = options.framerate;
-        }
+      console.log(`The 'videoOutputPath' was not set, it has been set to the default '${DEFAULT_VIDEO_OUTPUT_FOLDER}'`);
     }
 
-    onSuiteStart(suiteStartObject) {
-        let suiteObject = JSON.stringify(suiteStartObject);
-        suiteObject = JSON.parse(suiteObject);
+    if (typeof options.savePassedVideo === 'boolean') {
+      if (options.savePassedVideo) {
+        options.savePassedVideo = options.savePassedVideo;
+      } else {
+        options.savePassedVideo = DEFAULT_SAVE_PASSED_VIDEO;
+      }
+    } else {
+      options.savePassedVideo = DEFAULT_SAVE_PASSED_VIDEO; // eslint-disable-next-line no-console
 
-        if (suiteObject.type === 'scenario') {
-            scenarioName = suiteObject.title;
-            scenarioName = scenarioName.replace(/ /g, '_');
-            scenarioName = scenarioName.trim();
-        }
-
-        if (!_fs.default.existsSync(`${this.options.videoOutputPath}`)) {
-            _fs.default.mkdirSync(`${this.options.videoOutputPath}`);
-        }
+      console.log(`'savePassedVideo' received unsuported parameter, it has been set to the default '${DEFAULT_SAVE_PASSED_VIDEO}'`);
     }
 
-    onAfterCommand(afterCommandObject) {
-        let commandPerformed = afterCommandObject.endpoint;
-        commandPerformed = commandPerformed.substring(commandPerformed.lastIndexOf('/') + 1);
-        commandPerformed = commandPerformed.trim();
-        let actions;
+    if (!options.jsonWireCommands) {
+      options.jsonWireCommands = DEFAULT_JSON_WIRE_ACTION; // eslint-disable-next-line no-console
 
-        if (this.options.jsonWireCommands === DEFAULT_JSON_WIRE_ACTION) {
-            actions = _fs.default.readFileSync(_path.default.resolve(_path.default.join(__dirname, this.options.jsonWireCommands)));
-            actions = actions.toString();
-            actions = JSON.parse(actions);
-        } else {
-            actions = _fs.default.readFileSync(_path.default.resolve(this.options.jsonWireCommands));
-            actions = actions.toString();
-            actions = JSON.parse(actions);
-        }
-
-        if (actions.jsonWireActions.includes(commandPerformed)) {
-            let videoOutputPath = _path.default.resolve(this.options.videoOutputPath);
-
-            let imageName = 'img' + imageCount.toString().padStart(3, '0');
-            let fileName = `${videoOutputPath}/${scenarioName}/` + imageName + '.png';
-
-            if (!_fs.default.existsSync(`${videoOutputPath}`)) {
-                _fs.default.mkdirSync(`${videoOutputPath}`);
-            }
-
-            if (!_fs.default.existsSync(`${videoOutputPath}/${scenarioName}`)) {
-                _fs.default.mkdirSync(`${videoOutputPath}/${scenarioName}`);
-            }
-
-            (0, _systemSleep.default)(100);
-            browser.saveScreenshot(fileName);
-            (0, _systemSleep.default)(1000);
-            imageCount++;
-        }
+      console.log('The \'jsonWireCommands\' was not set, it has been set to the default configurations');
+    } else {
+      options.jsonWireCommands = options.jsonWireCommands;
     }
 
-    onSuiteEnd(suiteEndObject) {
-        let suiteObject = JSON.stringify(suiteEndObject);
-        suiteObject = JSON.parse(suiteObject);
+    if (!options.framerate) {
+      options.framerate = DEFAULT_FRAME_RATE; // eslint-disable-next-line no-console
 
-        if (suiteObject.type === 'scenario') {
-            let resultObject = [];
-            suiteObject.tests.forEach(element => {
-                resultObject.push(element.state);
-            });
-            (0, _systemSleep.default)(900);
-
-            let videoOutputPath = _path.default.resolve(this.options.videoOutputPath);
-
-            let imagePath = `${videoOutputPath}/${scenarioName}/img%03d.png`;
-            let videoPath = `${videoOutputPath}/videos/${scenarioName}.mp4`;
-
-            if (!_fs.default.existsSync(`${videoOutputPath}/videos`)) {
-                _fs.default.mkdirSync(`${videoOutputPath}/videos`);
-            }
-
-            try {
-                let videoRecordingCommand = `${_ffmpeg.default.path} -framerate ${this.options.framerate} -i ${imagePath} -vf scale=2880x1312 -pix_fmt yuv420p ${videoPath}`;
-
-                _child_process.default.execSync(videoRecordingCommand, {
-                    stdio: 'ignore',
-                    shell: true
-                });
-            } catch (e) {
-                (0, _systemSleep.default)(900);
-            }
-
-            if (this.options.savePassedVideo) {
-                (0, _fsExtra.removeSync)(`${videoOutputPath}/${scenarioName}`);
-            } else {
-                (0, _fsExtra.removeSync)(`${videoOutputPath}/${scenarioName}`);
-
-                if (resultObject.includes('passed') && !resultObject.includes('failed')) {
-                    (0, _fsExtra.removeSync)(`${this.options.videoOutputPath}/videos/${scenarioName}.mp4`);
-                }
-            }
-        }
+      console.log('The \'framerate\' was not set, it has been set to the default configurations');
+    } else {
+      options.framerate = options.framerate;
     }
+  }
+
+  onSuiteStart(suiteStartObject) {
+    let suiteObject = JSON.stringify(suiteStartObject);
+    suiteObject = JSON.parse(suiteObject);
+
+    if (suiteObject.type === 'scenario') {
+      scenarioName = suiteObject.title;
+      scenarioName = scenarioName.replace(/ /g, '_');
+      scenarioName = scenarioName.trim();
+    }
+
+    if (!_fs.default.existsSync(`${this.options.videoOutputPath}`)) {
+      _fs.default.mkdirSync(`${this.options.videoOutputPath}`);
+    }
+  }
+
+  onAfterCommand(afterCommandObject) {
+    let commandPerformed = afterCommandObject.endpoint;
+    commandPerformed = commandPerformed.substring(commandPerformed.lastIndexOf('/') + 1);
+    commandPerformed = commandPerformed.trim();
+    let actions;
+
+    if (this.options.jsonWireCommands === DEFAULT_JSON_WIRE_ACTION) {
+      actions = _fs.default.readFileSync(_path.default.resolve(_path.default.join(__dirname, this.options.jsonWireCommands)));
+      actions = actions.toString();
+      actions = JSON.parse(actions);
+    } else {
+      actions = _fs.default.readFileSync(_path.default.resolve(this.options.jsonWireCommands));
+      actions = actions.toString();
+      actions = JSON.parse(actions);
+    }
+
+    if (actions.jsonWireActions.includes(commandPerformed)) {
+      let videoOutputPath = _path.default.resolve(this.options.videoOutputPath);
+
+      let imageName = 'img' + imageCount.toString().padStart(3, '0');
+      let fileName = `${videoOutputPath}/${scenarioName}/` + imageName + '.png';
+
+      if (!_fs.default.existsSync(`${videoOutputPath}/${scenarioName}`)) {
+        _fs.default.mkdirSync(`${videoOutputPath}/${scenarioName}`);
+      }
+
+      (0, _systemSleep.default)(100);
+      browser.saveScreenshot(fileName);
+      (0, _systemSleep.default)(1000);
+      imageCount++;
+    }
+  }
+
+  onSuiteEnd(suiteEndObject) {
+    let suiteObject = JSON.stringify(suiteEndObject);
+    suiteObject = JSON.parse(suiteObject);
+
+    if (suiteObject.type === 'scenario') {
+      let resultObject = [];
+      suiteObject.tests.forEach(element => {
+        resultObject.push(element.state);
+      });
+      (0, _systemSleep.default)(900);
+
+      let videoOutputPath = _path.default.resolve(this.options.videoOutputPath);
+
+      let imagePath = `${videoOutputPath}/${scenarioName}/img%03d.png`;
+      let videoPath = `${videoOutputPath}/videos/${scenarioName}.mp4`;
+
+      if (!_fs.default.existsSync(`${videoOutputPath}/videos/`)) {
+        _fs.default.mkdirSync(`${videoOutputPath}/videos`);
+      }
+
+      if (_fs.default.existsSync(`${videoPath}`)) {
+        (0, _fsExtra.removeSync)(`${videoPath}`);
+      }
+
+      try {
+        let videoRecordingCommand = `${_ffmpeg.default.path} -framerate ${this.options.framerate} -i ${imagePath} -vf scale=2880x1312 -pix_fmt yuv420p ${videoPath}`;
+
+        _child_process.default.execSync(videoRecordingCommand, {
+          stdio: 'ignore',
+          shell: true
+        });
+      } catch (e) {
+        (0, _systemSleep.default)(900);
+      }
+
+      if (this.options.savePassedVideo) {
+        (0, _fsExtra.removeSync)(`${videoOutputPath}/${scenarioName}`);
+      } else {
+        (0, _fsExtra.removeSync)(`${videoOutputPath}/${scenarioName}`);
+
+        if (resultObject.includes('passed') && !resultObject.includes('failed')) {
+          (0, _fsExtra.removeSync)(`${this.options.videoOutputPath}/videos/${scenarioName}.mp4`);
+        }
+      }
+    }
+  }
 
 }
 
