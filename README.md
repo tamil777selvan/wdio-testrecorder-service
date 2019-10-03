@@ -7,7 +7,7 @@ This reporter uses [ffmpeg](https://www.ffmpeg.org/) to convert sequence of imag
 You can simple do it by:
 
 ```bash
-npm install wdio-allure-reporter --save-dev
+npm i wdio-testrecorder-reporter
 ```
 
 Instructions on how to install `WDIO` can be found [here](http://webdriver.io/guide/getstarted/install.html)
