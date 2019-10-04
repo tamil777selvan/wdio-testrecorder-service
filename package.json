@@ -1,6 +1,6 @@
 {
   "name": "wdio-testrecorder-reporter",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Package to record and save wdio test executions",
   "main": "dist/index.js",
   "scripts": {
@@ -15,7 +15,7 @@
   "keywords": [
     "wdio-test-recorder",
     "test recorder",
-    "test-recorder"
+    "test-recorder",
     "recorder",
     "screenrecorder",
     "screen recorder",
