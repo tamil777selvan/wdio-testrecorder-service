@@ -13,7 +13,13 @@
     "url": "git+https://github.com/tamil777selvan/wdio-testrecorder-reporter.git"
   },
   "keywords": [
-    "wdio test recorder"
+    "wdio-test-recorder",
+    "test recorder",
+    "test-recorder"
+    "recorder",
+    "screenrecorder",
+    "screen recorder",
+    "wdio-testvideo-recorder"
   ],
   "author": "Tamil Selvan <tamil777selvan@gmail.com>",
   "license": "ISC",
