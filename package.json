@@ -33,7 +33,7 @@
   "dependencies": {
     "@babel/core": "^7.6.2",
     "@ffmpeg-installer/ffmpeg": "^1.0.20",
-    "@wdio/reporter": "^5.13.2",
+    "@wdio/reporter": "^6.3.0",
     "babel-plugin-transform-function-bind": "^6.22.0",
     "child_process": "^1.0.2",
     "fs": "0.0.1-security",
