@@ -109,7 +109,11 @@ export default class testrecorder extends Reporter {
             }
             try {
                 let videoRecordingCommand = `${ffmpeg.path} -framerate ${this.options.framerate} -i ${imagePath} -vf scale=2880x1312 -pix_fmt yuv420p ${videoPath}`;
-                childProcess.execSync(videoRecordingCommand, {stdio: 'ignore', shell: true});
+                
+                // escaping bad arguments
+                var escapedCmd = videoRecordingCommand.split(" ");
+                var fileArg = escapedCmd.shift();
+                childProcess.execFile(fileArg, escapedCmd);
             } catch (e) {
                 sleep(900);
             }
