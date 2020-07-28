@@ -141,11 +141,11 @@ class testrecorder extends _reporter.default {
 
       try {
         let videoRecordingCommand = `${_ffmpeg.default.path} -framerate ${this.options.framerate} -i ${imagePath} -vf scale=2880x1312 -pix_fmt yuv420p ${videoPath}`;
-
-        _child_process.default.execSync(videoRecordingCommand, {
-          stdio: 'ignore',
-          shell: true
-        });
+        
+        // escaping bad args
+        var escapedCmd = videoRecordingCommand.split(" ");
+        var fileArg = escapedCmd.shift();
+        _child_process.default.execFile(fileArg, escapedCmd);
       } catch (e) {
         (0, _systemSleep.default)(900);
       }
