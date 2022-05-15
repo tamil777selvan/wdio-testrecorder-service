@@ -1,44 +1,45 @@
 {
   "name": "wdio-testrecorder-reporter",
-  "version": "1.0.2",
-  "description": "Package to record and save wdio test executions",
-  "main": "dist/index.js",
-  "scripts": {
-    "build": "babel index.js -d dist",
-    "start": "npm run build && node dist/index.js",
-    "lint": "eslint index.js"
+  "description": "Package to record and save wdio cucumber test executions",
+  "author": {
+    "name": "Tamil Selvan",
+    "email": "tamil777selvan@gmail.com"
+  },
+  "homepage": "https://github.com/tamil777selvan/wdio-testrecorder-reporter#readme",
+  "license": "ISC",
+  "version": "1.1.0",
+  "main": "build/index",
+  "keywords": [
+    "webdriverio",
+    "wdio",
+    "cucumber",
+    "wdio-cucumber",
+    "test-recorder",
+    "wdio-recorder",
+    "wdio-cucumber-recorder",
+    "wdio-cucumber-test-recorder"
+  ],
+  "bugs": {
+    "url": "https://github.com/tamil777selvan/wdio-testrecorder-reporter/issues"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tamil777selvan/wdio-testrecorder-reporter.git"
   },
-  "keywords": [
-    "wdio-test-recorder",
-    "test recorder",
-    "test-recorder",
-    "recorder",
-    "screenrecorder",
-    "screen recorder",
-    "wdio-testvideo-recorder"
-  ],
-  "author": "Tamil Selvan <tamil777selvan@gmail.com>",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/tamil777selvan/wdio-testrecorder-reporter/issues"
-  },
-  "homepage": "https://github.com/tamil777selvan/wdio-testrecorder-reporter#readme",
-  "devDependencies": {
-    "@babel/preset-env": "^7.6.2"
+  "scripts": {
+    "build": "npx tsc"
   },
   "dependencies": {
-    "@babel/core": "^7.6.2",
-    "@ffmpeg-installer/ffmpeg": "^1.0.20",
-    "@wdio/reporter": "^5.13.2",
-    "babel-plugin-transform-function-bind": "^6.22.0",
-    "child_process": "^1.0.2",
+    "@ffmpeg-installer/ffmpeg": "1.1.0",
+    "@wdio/logger": "^7.19.0",
+    "@wdio/reporter": "7.19.7",
     "fs": "0.0.1-security",
-    "fs-extra": "^9.0.1",
-    "path": "^0.12.7",
-    "system-sleep": "^1.3.6"
+    "fs-extra": "^10.1.0",
+    "path": "0.12.7",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.4"
   }
 }
