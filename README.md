@@ -18,7 +18,7 @@ Configure the output directory in your wdio.conf.js file:
 ```js
 exports.config = {
     // ...
-    reporters: ['TestRecorder', {videoOutputPath: '', attachVideoToCucumberReport: false}]
+    reporters: ['TestRecorder', {videoOutputPath: '', attachVideoToCucumberReport: true, removeAttachedVideos: false}]
   // ...
 }
 ```
@@ -28,4 +28,4 @@ exports.config = {
 - `removeAttachedVideos` - Delete the saved video from temp file
 
 Note:
-  `attachVideoToCucumberReport` will work only if `cucumberjs-json` reporter is enabled
+  `attachVideoToCucumberReport` will work only if [cucumberjs-json](https://www.npmjs.com/package/wdio-cucumberjs-json-reporter) reporter is enabled
