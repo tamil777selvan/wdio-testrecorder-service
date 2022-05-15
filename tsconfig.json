@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "ES6",
+        "baseUrl": ".",
+        "outDir": "./build",
+        "rootDir": "./src",
+        "declaration": true,
+        "declarationMap": true,
+        "resolveJsonModule": true,
+        "removeComments": false,
+        "esModuleInterop": true
+      },
+      "include": ["src/**/*"],
+      "exclude": ["/node_modules"]
+}
