@@ -1,11 +1,11 @@
-import WDIOReporter, { AfterCommandArgs, SuiteStats } from '@wdio/reporter';
+import WDIOReporter, {AfterCommandArgs, SuiteStats} from '@wdio/reporter';
 import logger from '@wdio/logger'
 import {v4 as uuidv4} from 'uuid';
 import fs from 'fs';
 import path from 'path';
-import { removeSync } from 'fs-extra/lib/remove';
+import {removeSync} from 'fs-extra/lib/remove';
 import ffmpeg from '@ffmpeg-installer/ffmpeg';
-import { execSync } from 'child_process';
+import {execSync} from 'child_process';
 
 const log = logger('wdio-testrecorder-reporter');
 
@@ -34,9 +34,7 @@ export default class TestRecoder extends WDIOReporter {
 
         // Determine whether to attach video to cucumber tests
         if (typeof options.attachVideoToCucumberReport === 'boolean') {
-            if (options.attachVideoToCucumberReport) {
-                options.attachVideoToCucumberReport = options.attachVideoToCucumberReport;
-            } else {
+            if (!options.attachVideoToCucumberReport) {
                 options.attachVideoToCucumberReport = DEFAULT_ATTACH_VIDEO_TO_CUCUMBER_REPORT;
             }
         } else {
@@ -46,9 +44,7 @@ export default class TestRecoder extends WDIOReporter {
 
         // Determine whether to attach video ahould be removed or not
         if (typeof options.removeAttachedVideos === 'boolean') {
-            if (options.removeAttachedVideos) {
-                options.removeAttachedVideos = options.removeAttachedVideos;
-            } else {
+            if (!options.removeAttachedVideos) {
                 options.removeAttachedVideos = DEFAULT_REMOVE_ATTACHED_VIDEOS;
             }
         } else {
@@ -78,9 +74,9 @@ export default class TestRecoder extends WDIOReporter {
         const command = commandArgs.endpoint.substring(commandArgs.endpoint.lastIndexOf('/') + 1).trim();
         const actions = JSON.parse((fs.readFileSync(path.resolve(path.join(__dirname, this.options.jsonWireCommands)))).toString())
         if (actions.jsonWireActions.includes(command)) {
-            let videoOutputPath = path.resolve(this.videoOutputPath);
-            let imageName = 'img' + imageCapturedCount.toString().padStart(3, '0');
-            let fileName = `${videoOutputPath}/${testId}-${scenarioName}/` + imageName + '.png';
+            const videoOutputPath = path.resolve(this.videoOutputPath);
+            const imageName = 'img' + imageCapturedCount.toString().padStart(3, '0');
+            const fileName = `${videoOutputPath}/${testId}-${scenarioName}/` + imageName + '.png';
             if (testId !== null && scenarioName !== null) {
                 if (!fs.existsSync(`${videoOutputPath}/${testId}-${scenarioName}`)) {
                     fs.mkdirSync(`${videoOutputPath}/${testId}-${scenarioName}`);
@@ -95,9 +91,9 @@ export default class TestRecoder extends WDIOReporter {
     onSuiteEnd(suiteStats: SuiteStats): void {
         const suite = JSON.parse(JSON.stringify(suiteStats));
         if (suite.type === 'scenario') {
-            let videoOutputPath = path.resolve(this.videoOutputPath);
-            let imagePath = `${videoOutputPath}/${testId}-${scenarioName}/img%03d.png`;
-            let videoPath = `${videoOutputPath}/videos/${testId}-${scenarioName}.mp4`;
+            const videoOutputPath = path.resolve(this.videoOutputPath);
+            const imagePath = `${videoOutputPath}/${testId}-${scenarioName}/img%03d.png`;
+            const videoPath = `${videoOutputPath}/videos/${testId}-${scenarioName}.mp4`;
             if (!fs.existsSync(`${videoOutputPath}/videos/`)) {
                 fs.mkdirSync(`${videoOutputPath}/videos`);
             }
@@ -107,7 +103,7 @@ export default class TestRecoder extends WDIOReporter {
             try {
                 const command = `${ffmpeg.path} -y -r 10 -i ${imagePath} -vcodec libx264 -crf 32 -pix_fmt yuv420p -vf "scale=1200:trunc(ow/a/2)*2","setpts=3.0*PTS" ${videoPath}`;
                 //@ts-expect-error
-                execSync(command, {stdio: 'ignore', shell: true, windowsHide: true,})
+                execSync(command, {stdio: 'ignore', shell: true, windowsHide: true});
 
                 // Remove converted screenshot images
                 removeSync(`${videoOutputPath}/${testId}-${scenarioName}`);
@@ -118,7 +114,7 @@ export default class TestRecoder extends WDIOReporter {
 
                 if (this.options.attachVideoToCucumberReport) {
                     //@ts-expect-error
-                    (process.emit)( 'wdioCucumberJsReporter:attachment', { data: base64Video, type: 'video/mp4' } );
+                    (process.emit)( 'wdioCucumberJsReporter:attachment', {data: base64Video, type: 'video/mp4'} );
                 }
 
                 if (this.options.attachVideoToCucumberReport && this.options.removeAttachedVideos) {
