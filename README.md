@@ -1,13 +1,13 @@
-# wdio-testrecorder-reporter
-A reporter for [WDIO](https://webdriver.io/) that generates videos of your wdio cucumber test executions.
+# wdio-testrecorder-service
+A service for [WDIO](https://webdriver.io/) that generates videos of your wdio cucumber test executions.
 
-This reporter uses [ffmpeg](https://www.ffmpeg.org/) to convert sequence of images to video.
+This service uses [ffmpeg](https://www.ffmpeg.org/) to convert sequence of images to video.
 ## Installation
 
 You can simple do it by:
 
 ```bash
-npm i wdio-testrecorder-reporter
+npm i wdio-testrecorder-service
 ```
 
 Instructions on how to install `WDIO` can be found [here](http://webdriver.io/guide/getstarted/install.html)
@@ -18,7 +18,15 @@ Configure the output directory in your wdio.conf.js file:
 ```js
 exports.config = {
     // ...
-    reporters: ['TestRecorder', {videoOutputPath: '', attachVideoToCucumberReport: true, removeAttachedVideos: false}]
+    services: [
+      [
+        'TestRecorder', {
+          videoOutputPath: '', 
+          attachVideoToCucumberReport: true, 
+          removeAttachedVideos: false
+        }
+      ]
+    ]
   // ...
 }
 ```
@@ -29,3 +37,6 @@ exports.config = {
 
 Note:
   `attachVideoToCucumberReport` will work only if [cucumberjs-json](https://www.npmjs.com/package/wdio-cucumberjs-json-reporter) reporter is enabled
+
+## Limitations
+Since this service captures screenshot in runtime increases the execution timeline.
