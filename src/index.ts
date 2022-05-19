@@ -2,7 +2,6 @@ import logger from '@wdio/logger'
 import type {Services} from '@wdio/types'
 import {v4 as uuidv4} from 'uuid';
 import fs from 'fs';
-import path from 'path';
 import {removeSync} from 'fs-extra/lib/remove';
 import {writeFile} from 'fs/promises';
 import ffmpeg from '@ffmpeg-installer/ffmpeg';
@@ -33,7 +32,7 @@ export default class TestRecoderService implements Services.ServiceInstance {
     }
 
     async afterCommand (commandName: string) {
-        const {jsonWireActions} = JSON.parse((fs.readFileSync(path.resolve(this._options.jsonWireActions))).toString());
+        const jsonWireActions = this._options.jsonWireActions;
         if (jsonWireActions.includes(commandName)) {
             const file = `${this._baseDirectory}/images/img${this._imageCapturedCount.toString().padStart(3, '0')}.png`;
             //@ts-expect-error

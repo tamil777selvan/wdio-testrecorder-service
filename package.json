@@ -7,7 +7,7 @@
   },
   "homepage": "https://github.com/tamil777selvan/wdio-testrecorder-service#readme",
   "license": "MIT",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "keywords": [
@@ -16,6 +16,8 @@
     "wdio-plugin",
     "wdio-service",
     "cucumber",
+    "recorder",
+    "screen recorder",
     "wdio-cucumber",
     "test-recorder",
     "wdio-recorder",
@@ -34,10 +36,12 @@
     "build": "tsc",
     "lint": "eslint '**/*.ts' --max-warnings 0"
   },
+  "peerDependencies": {
+    "@wdio/logger": "^7.*",
+    "@wdio/types": "^7.*"
+  },
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "1.1.0",
-    "@wdio/logger": "^7.19.0",
-    "@wdio/types": "^7.19.5",
     "fs": "0.0.1-security",
     "fs-extra": "^10.1.0",
     "path": "0.12.7",
