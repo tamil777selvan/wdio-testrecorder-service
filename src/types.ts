@@ -17,7 +17,6 @@ export interface TestRecoderConfig {
     removeAttachedVideos?: boolean
     /**
      * defalut path for json wire command
-     * @default '../default/wdioCommand.json'
     */
-    jsonWireActions: string
+    jsonWireActions: string[]
 }
